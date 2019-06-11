@@ -4,9 +4,8 @@ from flask import abort, Flask, jsonify, request
 
 app = Flask(__name__)
 slack_api_client = SlackClient(os.environ['SLACK_API_TOKEN'])
-print(os.environ['SLACK_BOT_TOKEN'])
-#slack_bot_client = SlackClient(os.environ['SLACK_BOT_TOKEN'])
-
+slack_bot_client = SlackClient(os.environ['SLACK_BOT_TOKEN'])
+SLACK_WEBHOOK_SECRET = os.environ['SLACK_WEBHOOK_SECRET']
 
 slack_api_client.api_call("api.test")
 
@@ -35,11 +34,25 @@ def test():
   return jsonify(payload)
 '''
 
+def send_message(channel_id, message):
+  payload = {
+    
+  }
+  slack_api_client.api_call(
+    "chat.postMessage",
+    channel=channel_id,
+    text=message,
+    username='pythonbot',
+    icon_emoji=':robot_face:'
+  )
+
 if __name__ == "__main__":
   channels = list_channels()
   if channels:
     print("Channels: ")
     for c in channels:
       print(c['name'] + " (" + c['id'] + ")")
-    else:
-      print("Unable to authenticate.")
+      if c['name'] == 'general':
+        send_message(c['id'], "Hello " + c['name'] + "!")
+  else:
+    print("Unable to authenticate.")
