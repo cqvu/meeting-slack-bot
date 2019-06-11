@@ -19,3 +19,6 @@ def test():
             response_type='in_channel',
             text='hello world!',
     )
+
+if __name__ == "__main__":
+	app.run()
