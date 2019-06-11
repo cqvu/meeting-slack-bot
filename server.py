@@ -11,6 +11,7 @@ def list_channels():
   channels_call = slack_client.api_call("channels.list")
   if channels_call.get('ok'):
     return channels_call['channels']
+    print("in here")
   return None
 
 def is_request_valid(request):
