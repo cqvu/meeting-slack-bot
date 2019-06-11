@@ -15,6 +15,7 @@ def test():
     if not is_request_valid(request):
         abort(400)
 
+    payload = 
     return jsonify(
             response_type='in_channel',
             text='hello world!',
