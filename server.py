@@ -3,15 +3,17 @@ from slackclient import SlackClient
 from flask import abort, Flask, jsonify, request
 
 app = Flask(__name__)
-slack_client = SlackClient(os.environ['SLACK_API_TOKEN'])
+slack_api_client = SlackClient(os.environ['SLACK_API_TOKEN'])
+print(os.environ['SLACK_BOT_TOKEN'])
+#slack_bot_client = SlackClient(os.environ['SLACK_BOT_TOKEN'])
 
-slack_client.api_call("api.test")
+
+slack_api_client.api_call("api.test")
 
 def list_channels():
-  channels_call = slack_client.api_call("channels.list")
+  channels_call = slack_api_client.api_call("channels.list")
   if channels_call.get('ok'):
     return channels_call['channels']
-    print("in here")
   return None
 
 def is_request_valid(request):
