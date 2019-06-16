@@ -27,14 +27,13 @@ def verify():
 
 @app.route('/test', methods=['POST'])
 def test():
-  print("in test")
   if not is_request_valid(request):
     print("not valid")
     abort(400)
     
   payload = {
-    response_type:'in_channel',
-    text:'hello!'
+    'response_type':'in_channel',
+    'text':'hello!'
   }
   
   return jsonify(payload)
