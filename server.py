@@ -37,9 +37,6 @@ def test():
 
 
 def send_message(channel_id, message):
-  payload = {
-    
-  }
   slack_api_client.api_call(
     "chat.postMessage",
     channel=channel_id,
