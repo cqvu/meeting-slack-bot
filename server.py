@@ -26,8 +26,12 @@ def test():
     print("not valid")
     abort(400)
     
-  message = json.loads(request.form["payload"])
-  print(message)
+  data = request.form
+  user_id = data['user_id']
+  
+  
+  
+  
   payload = {
     'response_type':'in_channel',
     'text':'hello!'
