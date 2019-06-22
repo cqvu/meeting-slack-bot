@@ -39,8 +39,20 @@ def test():
         "callback_id": user_id + "test",
         "elements": [
           {
-            "label": "Additional information",
+            "label": "Text 1",
             "name": "comment",
+            "type": "textarea",
+            "hint": "Provide additional information if needed."
+          },
+          {
+            "label": "Text 2",
+            "name": "test2",
+            "type": "textarea",
+            "hint": "Provide additional information if needed."
+          },
+          {
+            "label": "Text 3",
+            "name": "test3",
             "type": "textarea",
             "hint": "Provide additional information if needed."
           }
