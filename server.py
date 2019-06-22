@@ -26,10 +26,27 @@ def test():
     print("not valid")
     abort(400)
     
-  data = request.form
-  user_id = data['user_id']
+  message = request.form
+  user_id = message['user_id']
   
-  
+  if message['command'] == '/test':
+    open_dialog = slack_api_client.api_call(
+      "dialog.open",
+      trigger_id = message['trigger_id'],
+      dialog = {
+        "title": "Enter a message",
+        "submit_label": "Submit",
+        "callback_id": user_id + "test",
+        "elements": [
+          {
+            "label": "Additional information",
+            "name": "comment",
+            "type": "textarea",
+            "hint": "Provide additional information if needed."
+          }
+        ]
+      }
+    )
   
   
   payload = {
