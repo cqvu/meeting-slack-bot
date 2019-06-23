@@ -68,6 +68,13 @@ def test():
   
   return jsonify(payload)
 
+@app.route('/interactive', methods=['POST'])
+def interactive():
+  print("IN INTERACTIVE")
+  data = request.form
+  print(data)
+  return 200
+
 if __name__ == "__main__":
   app.run()
   
