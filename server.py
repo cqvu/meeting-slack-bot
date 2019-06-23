@@ -14,6 +14,12 @@ def is_request_valid(request):
   is_team_id_valid = request.form['team_id'] == os.environ['SLACK_TEAM_ID']
   return is_token_valid and is_team_id_valid
 
+def list_users():
+  users_call = slack_api_client.api_call("users.list")
+  if users_call.get('ok'):
+    return users_call['channels']
+  return None
+
 @app.route('/', methods=['GET'])
 def verify():
   return "Success"
@@ -68,7 +74,8 @@ def test():
 
 @app.route('/interactive', methods=['POST'])
 def interactive():
-  message = request.form
+  message = json.loads(request.form['payload'])
+  print(message)
   if message['type'] == 'dialog_submission':
     print("Received")
   return make_response("", 200)
