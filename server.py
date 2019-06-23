@@ -1,6 +1,6 @@
 import os
 from slackclient import SlackClient
-from flask import abort, Flask, jsonify, request
+from flask import abort, Flask, jsonify, request, make_response
 import json
 
 app = Flask(__name__)
@@ -13,8 +13,6 @@ def is_request_valid(request):
   is_token_valid = request.form['token'] == os.environ['SLACK_VERIFICATION_TOKEN']
   is_team_id_valid = request.form['team_id'] == os.environ['SLACK_TEAM_ID']
   return is_token_valid and is_team_id_valid
-
-
 
 @app.route('/', methods=['GET'])
 def verify():
@@ -40,7 +38,7 @@ def test():
         "elements": [
           {
             "label": "Text 1",
-            "name": "comment",
+            "name": "test1",
             "type": "textarea",
             "hint": "Provide additional information if needed."
           },
@@ -70,10 +68,10 @@ def test():
 
 @app.route('/interactive', methods=['POST'])
 def interactive():
-  print("IN INTERACTIVE")
-  data = request.form
-  print(data)
-  return 200
+  message = request.form
+  if message['type'] == 'dialog_submission':
+    print("Received")
+  return make_response("", 200)
 
 if __name__ == "__main__":
   app.run()
