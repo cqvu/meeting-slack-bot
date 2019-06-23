@@ -14,10 +14,10 @@ def is_request_valid(request):
   is_team_id_valid = request.form['team_id'] == os.environ['SLACK_TEAM_ID']
   return is_token_valid and is_team_id_valid
 
-def list_channels():
-  channels_call = slack_api_client.api_call("channels.list")
-  if channels_call.get('ok'):
-    return channels_call['channels']
+def get_members():
+  channels_info = slack_api_client.api_call("channels.info")
+  if channels_info.get('ok'):
+    return channels_info
   return None
 
 @app.route('/', methods=['GET'])
@@ -34,8 +34,8 @@ def test():
   user_id = message['user_id']
   
   if message['command'] == '/test':
-    members = list_members()
-    print
+    members = get_members()
+    print(members)
     open_dialog = slack_api_client.api_call(
       "dialog.open",
       trigger_id = message['trigger_id'],
