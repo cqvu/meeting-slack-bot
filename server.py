@@ -14,11 +14,18 @@ def is_request_valid(request):
   is_team_id_valid = request.form['team_id'] == os.environ['SLACK_TEAM_ID']
   return is_token_valid and is_team_id_valid
 
-def get_members():
-  channels_info = slack_bot_client.api_call("channels.info")
+def get_members_id():
+  channels_info = slack_bot_client.api_call("channels.info", channel="CK0FHK1LJ")
   if channels_info.get('ok'):
     return channels_info['channel']['members']
   return None
+
+def check_bot(user_id):
+  user_info = slack_bot_client.api_call("users.info", user=user_id)
+  if user_info['is_bot']:
+    return true
+  else:
+    return false
 
 @app.route('/', methods=['GET'])
 def verify():
@@ -35,7 +42,8 @@ def test():
   
   if message['command'] == '/test':
     members = get_members()
-    print(members)
+    for member in members:
+      if !check
     open_dialog = slack_api_client.api_call(
       "dialog.open",
       trigger_id = message['trigger_id'],
