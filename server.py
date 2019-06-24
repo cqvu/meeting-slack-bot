@@ -22,10 +22,10 @@ def get_members_id():
 
 def check_bot(user_id):
   user_info = slack_bot_client.api_call("users.info", user=user_id)
-  if user_info['is_bot']:
-    return true
+  if user_info['user']['is_bot']:
+    return True
   else:
-    return false
+    return False
 
 @app.route('/', methods=['GET'])
 def verify():
@@ -41,9 +41,11 @@ def test():
   user_id = message['user_id']
   
   if message['command'] == '/test':
-    members = get_members()
+    members = get_members_id()
     for member in members:
-      if !check
+      if not check_bot(member):
+        print("Sending to:", member)
+        
     open_dialog = slack_api_client.api_call(
       "dialog.open",
       trigger_id = message['trigger_id'],
