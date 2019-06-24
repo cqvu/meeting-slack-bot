@@ -15,9 +15,9 @@ def is_request_valid(request):
   return is_token_valid and is_team_id_valid
 
 def get_members():
-  channels_info = slack_api_client.api_call("channels.info")
+  channels_info = slack_bot_client.api_call("channels.info")
   if channels_info.get('ok'):
-    return channels_info
+    return channels_info['channel']['members']
   return None
 
 @app.route('/', methods=['GET'])
