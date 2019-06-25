@@ -44,7 +44,26 @@ def test():
     members = get_members_id()
     for member in members:
       if not check_bot(member):
-        print("Sending to:", member)
+        attach_json = [
+        {
+            "fallback": "You are unable use message buttons",
+            "callback_id": "scrum",
+            "color": "#3AA3E3",
+            "attachment_type": "default",
+            "actions": [
+                {
+                    "name": "addnotes",
+                    "text": "Add Notes",
+                    "type": "button",
+                    "value": "addnotes"
+                }
+            ]
+        }
+        ]
+        
+        slack_api_client.api_call("chat.postMessage",channel=member,text="Add Your Meeting Notes", attachments = attach_json)
+    
+        
         
     open_dialog = slack_api_client.api_call(
       "dialog.open",
