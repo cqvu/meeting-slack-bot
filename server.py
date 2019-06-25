@@ -15,8 +15,8 @@ def is_request_valid(request):
   is_team_id_valid = request.form['team_id'] == os.environ['SLACK_TEAM_ID']
   return is_token_valid and is_team_id_valid
 
-def get_members_id():
-  channels_info = slack_bot_client.api_call("channels.info", channel="CK0FHK1LJ")
+def get_members_id(channel):
+  channels_info = slack_bot_client.api_call("channels.info", channel=channel)
   if channels_info.get('ok'):
     return channels_info['channel']['members']
   return None
@@ -42,7 +42,7 @@ def test():
   user_id = message['user_id']
   
   if message['command'] == '/test':
-    members = get_members_id()
+    members = get_members_id("CK5HEF5R7")
     for member in members:
       if not check_bot(member):
         print("Sending to", member)
@@ -64,38 +64,6 @@ def test():
         ]
         
         button_res = slack_bot_client.api_call("chat.postMessage",channel=member,text="Add Your Meeting Notes", attachments = attach_json)
-        print("Button response:")
-        pprint(button_res)
-        
-        open_dialog = slack_api_client.api_call(
-          "dialog.open",
-          trigger_id = button_res['trigger_id'],
-          dialog = {
-            "title": "Enter a message",
-            "submit_label": "Submit",
-            "callback_id": user_id + "test",
-            "elements": [
-              {
-                "label": "Text 1",
-                "name": "test1",
-                "type": "textarea",
-                "hint": "Provide additional information if needed."
-              },
-              {
-                "label": "Text 2",
-                "name": "test2",
-                "type": "textarea",
-                "hint": "Provide additional information if needed."
-              },
-              {
-                "label": "Text 3",
-                "name": "test3",
-                "type": "textarea",
-                "hint": "Provide additional information if needed."
-              }
-            ]
-          }
-        )
   
   payload = {
     'response_type':'in_channel',
@@ -107,7 +75,39 @@ def test():
 @app.route('/interactive', methods=['POST'])
 def interactive():
   message = json.loads(request.form['payload'])
+  user_id = message['user']['id']
   print(message)
+  if message['type'] == 'interactive_message':
+    open_dialog = slack_api_client.api_call(
+      "dialog.open",
+      trigger_id = message['trigger_id'],
+      dialog = {
+        "title": "Enter a message",
+        "submit_label": "Submit",
+        "callback_id": user_id + "addnotes",
+        "elements": [
+            {
+              "label": "Text 1",
+              "name": "test1",
+              "type": "textarea",
+              "hint": "Provide additional information if needed."
+            },
+            {
+              "label": "Text 2",
+              "name": "test2",
+              "type": "textarea",
+              "hint": "Provide additional information if needed."
+            },
+            {
+              "label": "Text 3",
+              "name": "test3",
+              "type": "textarea",
+              "hint": "Provide additional information if needed."
+            }
+        ]
+      }
+    )
+    
   if message['type'] == 'dialog_submission':
     print("Received")
   return make_response("", 200)
