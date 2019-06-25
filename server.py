@@ -2,6 +2,7 @@ import os
 from slackclient import SlackClient
 from flask import abort, Flask, jsonify, request, make_response
 import json
+from pprint import pprint
 
 app = Flask(__name__)
 slack_api_client = SlackClient(os.environ['SLACK_API_TOKEN'])
@@ -63,8 +64,8 @@ def test():
         ]
         
         button_res = slack_bot_client.api_call("chat.postMessage",channel=member,text="Add Your Meeting Notes", attachments = attach_json)
-        
-        print("Trigger id:", button_res['trigger_id'])
+        print("Button response:")
+        pprint(button_res)
         
         open_dialog = slack_api_client.api_call(
           "dialog.open",
