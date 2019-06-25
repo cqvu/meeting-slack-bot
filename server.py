@@ -44,6 +44,7 @@ def test():
     members = get_members_id()
     for member in members:
       if not check_bot(member):
+        print("Sending to", member)
         attach_json = [
         {
             "fallback": "You are unable use message buttons",
