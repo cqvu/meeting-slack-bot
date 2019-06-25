@@ -63,7 +63,7 @@ def test():
         }
         ]
         
-        button_res = slack_bot_client.api_call("chat.postMessage",channel=member,text="Add Your Meeting Notes", attachments = attach_json)
+        button_res = slack_bot_client.api_call("chat.postMessage",channel=member,text="Add Your Meeting Notes", attachments = attach_json, as_user=True)
   
   payload = {
     'response_type':'in_channel',
@@ -76,7 +76,7 @@ def test():
 def interactive():
   message = json.loads(request.form['payload'])
   user_id = message['user']['id']
-  print(message)
+  print("Message in interactive: ", message)
   if message['type'] == 'interactive_message':
     open_dialog = slack_api_client.api_call(
       "dialog.open",
