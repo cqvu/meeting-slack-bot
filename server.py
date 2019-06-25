@@ -61,47 +61,44 @@ def test():
         }
         ]
         
-        slack_api_client.api_call("chat.postMessage",channel=member,text="Add Your Meeting Notes", attachments = attach_json)
-    
+        button_res = slack_bot_client.api_call("chat.postMessage",channel=member,text="Add Your Meeting Notes", attachments = attach_json)
         
+        print("Trigger id:", button_res['trigger_id'])
         
-    open_dialog = slack_api_client.api_call(
-      "dialog.open",
-      trigger_id = message['trigger_id'],
-      dialog = {
-        "title": "Enter a message",
-        "submit_label": "Submit",
-        "callback_id": user_id + "test",
-        "elements": [
-          {
-            "label": "Text 1",
-            "name": "test1",
-            "type": "textarea",
-            "hint": "Provide additional information if needed."
-          },
-          {
-            "label": "Text 2",
-            "name": "test2",
-            "type": "textarea",
-            "hint": "Provide additional information if needed."
-          },
-          {
-            "label": "Text 3",
-            "name": "test3",
-            "type": "textarea",
-            "hint": "Provide additional information if needed."
+        open_dialog = slack_api_client.api_call(
+          "dialog.open",
+          trigger_id = button_res['trigger_id'],
+          dialog = {
+            "title": "Enter a message",
+            "submit_label": "Submit",
+            "callback_id": user_id + "test",
+            "elements": [
+              {
+                "label": "Text 1",
+                "name": "test1",
+                "type": "textarea",
+                "hint": "Provide additional information if needed."
+              },
+              {
+                "label": "Text 2",
+                "name": "test2",
+                "type": "textarea",
+                "hint": "Provide additional information if needed."
+              },
+              {
+                "label": "Text 3",
+                "name": "test3",
+                "type": "textarea",
+                "hint": "Provide additional information if needed."
+              }
+            ]
           }
-        ]
-      }
-    )
-  
+        )
   
   payload = {
     'response_type':'in_channel',
-    'text':'hello!'
+    'text':'Sent Add Notes Reminder!'
   }
-  
-  
   
   return jsonify(payload)
 
