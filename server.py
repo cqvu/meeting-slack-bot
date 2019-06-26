@@ -130,7 +130,7 @@ def interactive():
             {
               "label": "Topic 2",
               "type": "select",
-              "name": "topic",
+              "name": "topic2",
               "options": [
                 {
                   "label": "Mentorship",
@@ -171,7 +171,6 @@ def interactive():
               "label": "Others",
               "name": "topic3",
               "type": "textarea",
-              "hint": "Provide additional information if needed.",
               "optional": True
             }
         ]
