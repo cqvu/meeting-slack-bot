@@ -32,8 +32,8 @@ def check_bot(user_id):
 def verify():
   return "Success"
 
-@app.route('/test', methods=['POST'])
-def test():
+@app.route('/remindnotes', methods=['POST'])
+def remindnotes():
   if not is_request_valid(request):
     print("not valid")
     abort(400)
@@ -41,7 +41,7 @@ def test():
   message = request.form
   user_id = message['user_id']
   
-  if message['command'] == '/test':
+  if message['command'] == '/remindnotes':
     members = get_members_id("CK5HEF5R7")
     for member in members:
       if not check_bot(member):
@@ -49,7 +49,7 @@ def test():
         attach_json = [
         {
             "fallback": "You are unable use message buttons",
-            "callback_id": "scrum",
+            "callback_id": "addnotes",
             "color": "#3AA3E3",
             "attachment_type": "default",
             "actions": [
@@ -77,14 +77,14 @@ def interactive():
   message = json.loads(request.form['payload'])
   user_id = message['user']['id']
   print("Message in interactive: ", message)
-  if message['type'] == 'interactive_message':
+  if message['callback_id'] == 'addnotes':
     open_dialog = slack_api_client.api_call(
       "dialog.open",
       trigger_id = message['trigger_id'],
       dialog = {
         "title": "Add Your Meeting Notes",
         "submit_label": "Submit",
-        "callback_id": user_id + "addnotes",
+        "callback_id": "meetingnotes " + user_id,
         "elements": [
             {
               "label": "Topic",
