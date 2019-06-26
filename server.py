@@ -89,7 +89,7 @@ def interactive():
             {
               "label": "Topic",
               "type": "select",
-              "name": "asdfkh",
+              "name": "first",
               "options": [
                 {
                   "label": "Mentorship",
@@ -126,7 +126,7 @@ def interactive():
             {
               "label": "Topic",
               "type": "select",
-              "name": "topic",
+              "name": "second",
               "options": [
                 {
                   "label": "Mentorship",
@@ -152,18 +152,26 @@ def interactive():
                   "label": "Destressers",
                   "value": "destress"
                 }
-              ]
+              ],
+              "optional": True
             },
-            
             {
-              "label": "Notes",
+              "label": "Notes/Updates",
               "name": "topic2",
               "type": "textarea",
+              "optional": True
             },
             {
               "label": "Others",
+              "name": "third",
+              "type": "text",
+              "placeholder": "Other topic"
+            },
+            {
+              "label": "Notes/Updates",
               "name": "topic3",
               "type": "textarea",
+              "optional": True
             }
         ]
       }
