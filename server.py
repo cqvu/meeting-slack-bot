@@ -84,7 +84,7 @@ def interactive():
       dialog = {
         "title": "Add Your Meeting Notes",
         "submit_label": "Submit",
-        "callback_id": user_id + " addnotes",
+        "callback_id": user_id + "addnotes",
         "elements": [
             {
               "label": "Topic",
@@ -165,7 +165,8 @@ def interactive():
               "label": "Others",
               "name": "third",
               "type": "text",
-              "placeholder": "Other topic"
+              "placeholder": "Other topic",
+              "optional": True
             },
             {
               "label": "Notes/Updates",
@@ -178,45 +179,9 @@ def interactive():
     )
     
   if message['type'] == 'dialog_submission':
-    dialog = {
-        "title": "Add Your Meeting Notes",
-        "submit_label": "Submit",
-        "callback_id": user_id + " confirm",
-        "elements": [
-    print("Received")
+    confirm_res = slack_bot_client.api_call("chat.postMessage",channel=user_id,text="Gotcha, thanks!", as_user=True)
     
   return make_response("", 200)
 
 if __name__ == "__main__":
   app.run()
-  
-  '''
-def list_channels():
-  channels_call = slack_api_client.api_call("channels.list")
-  if channels_call.get('ok'):
-    return channels_call['channels']
-  return None
-'''
-  
-  '''
-def send_message(channel_id, message):
-  slack_api_client.api_call(
-    "chat.postMessage",
-    channel=channel_id,
-    text=message,
-    username='pythonbot',
-    icon_emoji=':robot_face:'
-  )
-'''
-  
-  '''
-  channels = list_channels()
-  if channels:
-    print("Channels: ")
-    for c in channels:
-      print(c['name'] + " (" + c['id'] + ")")
-      if c['name'] == 'general':
-        send_message(c['id'], "Hello " + c['name'] + "!")
-  else:
-    print("Unable to authenticate.")
-  '''
