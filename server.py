@@ -89,6 +89,43 @@ def interactive():
             {
               "label": "Topic",
               "type": "select",
+              "name": "asdfkh",
+              "options": [
+                {
+                  "label": "Mentorship",
+                  "value": "mentorship"
+                },
+                {
+                  "label": "Projects Team",
+                  "value": "project"
+                },
+                {
+                  "label": "Professional",
+                  "value": "professional"
+                },
+                {
+                  "label": "Faculty Mixer",
+                  "value": "facultymixer"
+                },
+                {
+                  "label": "Town Hall",
+                  "value": "townhall"
+                },
+                {
+                  "label": "Destressers",
+                  "value": "destress"
+                }
+              ]
+            },
+            
+            {
+              "label": "Notes/Updates",
+              "name": "topic1",
+              "type": "textarea",
+            },
+            {
+              "label": "Topic",
+              "type": "select",
               "name": "topic",
               "options": [
                 {
@@ -112,28 +149,21 @@ def interactive():
                   "value": "townhall"
                 },
                 {
-                  "label": "",
-                  "value": "facultymixer"
-                } 
+                  "label": "Destressers",
+                  "value": "destress"
+                }
               ]
             },
-            {
-              "label": "Notes/Updates",
-              "name": "topic1",
-              "type": "textarea",
-              "hint": "Provide additional information if needed."
-            },
+            
             {
               "label": "Notes",
               "name": "topic2",
               "type": "textarea",
-              "hint": "Provide additional information if needed."
             },
             {
               "label": "Others",
               "name": "topic3",
               "type": "textarea",
-              "hint": "Provide additional information if needed."
             }
         ]
       }
