@@ -84,7 +84,7 @@ def interactive():
       dialog = {
         "title": "Add Your Meeting Notes",
         "submit_label": "Submit",
-        "callback_id": user_id + "addnotes",
+        "callback_id": user_id + " addnotes",
         "elements": [
             {
               "label": "Topic",
@@ -178,7 +178,13 @@ def interactive():
     )
     
   if message['type'] == 'dialog_submission':
+    dialog = {
+        "title": "Add Your Meeting Notes",
+        "submit_label": "Submit",
+        "callback_id": user_id + " confirm",
+        "elements": [
     print("Received")
+    
   return make_response("", 200)
 
 if __name__ == "__main__":
