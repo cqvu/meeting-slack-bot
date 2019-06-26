@@ -86,7 +86,6 @@ def interactive():
         "submit_label": "Submit",
         "callback_id": user_id + "addnotes",
         "elements": [
-            # Topic 1
             {
               "label": "Topic",
               "type": "select",
@@ -97,7 +96,7 @@ def interactive():
                   "value": "mentorship"
                 },
                 {
-                  "label": "Project Teams",
+                  "label": "Projects Team",
                   "value": "project"
                 },
                 {
@@ -113,65 +112,28 @@ def interactive():
                   "value": "townhall"
                 },
                 {
-                  "label": "Women in ECE",
-                  "value": "wece"
-                },
-                {
-                  "label": "Outreach",
-                  "value": "outreach"
-                }
+                  "label": "",
+                  "value": "facultymixer"
+                } 
               ]
             },
             {
               "label": "Notes/Updates",
               "name": "topic1",
               "type": "textarea",
+              "hint": "Provide additional information if needed."
             },
             {
-              "label": "Topic 2",
-              "type": "select",
-              "name": "topic2",
-              "options": [
-                {
-                  "label": "Mentorship",
-                  "value": "mentorship"
-                },
-                {
-                  "label": "Project Teams",
-                  "value": "project"
-                },
-                {
-                  "label": "Professional",
-                  "value": "professional"
-                },
-                {
-                  "label": "Faculty Mixer",
-                  "value": "facultymixer"
-                },
-                {
-                  "label": "Town Hall",
-                  "value": "townhall"
-                },
-                {
-                  "label": "Women in ECE",
-                  "value": "wece"
-                },
-                {
-                  "label": "Outreach",
-                  "value": "outreach"
-                }
-              ]
-            },
-            {
-              "label": "Notes/Updates",
+              "label": "Notes",
               "name": "topic2",
               "type": "textarea",
+              "hint": "Provide additional information if needed."
             },
             {
               "label": "Others",
               "name": "topic3",
               "type": "textarea",
-              "optional": True
+              "hint": "Provide additional information if needed."
             }
         ]
       }
