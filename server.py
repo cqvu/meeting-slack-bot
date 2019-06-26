@@ -82,27 +82,97 @@ def interactive():
       "dialog.open",
       trigger_id = message['trigger_id'],
       dialog = {
-        "title": "Enter a message",
+        "title": "Add Your Meeting Notes",
         "submit_label": "Submit",
         "callback_id": user_id + "addnotes",
         "elements": [
+            # Topic 1
             {
-              "label": "Text 1",
-              "name": "test1",
-              "type": "textarea",
-              "hint": "Provide additional information if needed."
+              "label": "Topic",
+              "type": "select",
+              "name": "topic",
+              "options": [
+                {
+                  "label": "Mentorship",
+                  "value": "mentorship"
+                },
+                {
+                  "label": "Project Teams",
+                  "value": "project"
+                },
+                {
+                  "label": "Professional",
+                  "value": "professional"
+                },
+                {
+                  "label": "Faculty Mixer",
+                  "value": "facultymixer"
+                },
+                {
+                  "label": "Town Hall",
+                  "value": "townhall"
+                },
+                {
+                  "label": "Women in ECE",
+                  "value": "wece"
+                },
+                {
+                  "label": "Outreach",
+                  "value": "outreach"
+                }
+              ]
             },
             {
-              "label": "Text 2",
-              "name": "test2",
+              "label": "Notes/Updates",
+              "name": "topic1",
               "type": "textarea",
-              "hint": "Provide additional information if needed."
             },
             {
-              "label": "Text 3",
-              "name": "test3",
+              "label": "Topic 2",
+              "type": "select",
+              "name": "topic",
+              "options": [
+                {
+                  "label": "Mentorship",
+                  "value": "mentorship"
+                },
+                {
+                  "label": "Project Teams",
+                  "value": "project"
+                },
+                {
+                  "label": "Professional",
+                  "value": "professional"
+                },
+                {
+                  "label": "Faculty Mixer",
+                  "value": "facultymixer"
+                },
+                {
+                  "label": "Town Hall",
+                  "value": "townhall"
+                },
+                {
+                  "label": "Women in ECE",
+                  "value": "wece"
+                },
+                {
+                  "label": "Outreach",
+                  "value": "outreach"
+                }
+              ]
+            },
+            {
+              "label": "Notes/Updates",
+              "name": "topic2",
               "type": "textarea",
-              "hint": "Provide additional information if needed."
+            },
+            {
+              "label": "Others",
+              "name": "topic3",
+              "type": "textarea",
+              "hint": "Provide additional information if needed.",
+              "optional": True
             }
         ]
       }
