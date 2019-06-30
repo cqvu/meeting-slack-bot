@@ -6,10 +6,6 @@ from pprint import pprint
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 
-g_login = GoogleAuth()
-g_login.LocalWebserverAuth()
-drive = GoogleDrive(g_login)
-
 app = Flask(__name__)
 slack_api_client = SlackClient(os.environ['SLACK_API_TOKEN'])
 slack_bot_client = SlackClient(os.environ['SLACK_BOT_TOKEN'])
@@ -74,6 +70,10 @@ def createnote():
   print('Created document with title: {0}'.format(
     doc.get('title')))
   '''
+  
+  g_login = GoogleAuth()
+  g_login.LocalWebserverAuth()
+  drive = GoogleDrive(g_login)
   
 @app.route('/remindnotes', methods=['POST'])
 def remindnotes():
