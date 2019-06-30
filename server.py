@@ -32,6 +32,14 @@ def check_bot(user_id):
 def verify():
   return "Success"
 
+@app.route('/createnote', methods=['POST'])
+def createnote():
+  if not is_request_valid(request):
+    print("not valid")
+    abort(400)
+    
+  
+
 @app.route('/remindnotes', methods=['POST'])
 def remindnotes():
   if not is_request_valid(request):
