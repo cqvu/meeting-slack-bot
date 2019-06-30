@@ -3,6 +3,10 @@ from slackclient import SlackClient
 from flask import abort, Flask, jsonify, request, make_response
 import json
 from pprint import pprint
+import os.path
+from googleapiclient.discovery import build
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
 
 app = Flask(__name__)
 slack_api_client = SlackClient(os.environ['SLACK_API_TOKEN'])
@@ -38,7 +42,15 @@ def createnote():
     print("not valid")
     abort(400)
     
-  
+  print("in createnote")
+  title = 'Test Doc'
+  body = {
+    'title': title
+  }
+  doc = service.documents() \
+    .create(body=body).execute()
+  print('Created document with title: {0}'.format(
+    doc.get('title')))
 
 @app.route('/remindnotes', methods=['POST'])
 def remindnotes():
