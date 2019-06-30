@@ -72,7 +72,17 @@ def createnote():
   '''
   
   g_login = GoogleAuth()
-  g_login.LocalWebserverAuth()
+  
+  g_login.LoadCredentialsFile("credentials.json")
+  if g_login.credentials is None:
+    g_login.LocalWebserverAuth()
+  elif g_login.access_token_expired:
+    g_login.Refresh()
+  else:
+    g_login.Authorize()
+
+  g_login.SaveCredentialsFile("credentials.json")
+
   drive = GoogleDrive(g_login)
   
   file1 = drive.CreateFile({'title': 'Hello'})  # Create GoogleDriveFile instance with title 'Hello.txt'.
