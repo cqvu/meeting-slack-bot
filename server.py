@@ -11,7 +11,7 @@ from google.auth.transport.requests import Request
 app = Flask(__name__)
 slack_api_client = SlackClient(os.environ['SLACK_API_TOKEN'])
 slack_bot_client = SlackClient(os.environ['SLACK_BOT_TOKEN'])
-
+SCOPES = ['https://www.googleapis.com/auth/documents.readonly']
 slack_api_client.api_call("api.test")
 
 def is_request_valid(request):
