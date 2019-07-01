@@ -49,8 +49,8 @@ def createnote():
   data = {
     "value1": file_name
   }
-  ifttt_webhook_url = "https://maker.ifttt.com/trigger/makenote/with/key/coqoCKj-CvTtB6KT-ZQda-"
-  response = requests.post(url=ifttt_webhook_url, json = data)
+  ifttt_makenote_url = "https://maker.ifttt.com/trigger/makenote/with/key/coqoCKj-CvTtB6KT-ZQda-"
+  response = requests.post(url=ifttt_makenote_url, json = data)
 
   payload = {
     'response_type':'in_channel',
@@ -106,6 +106,7 @@ def remindnotes():
 
 @app.route('/interactive', methods=['POST'])
 def interactive():
+  global meeting_doc
   message = json.loads(request.form['payload'])
   user_id = message['user']['id']
   print("Message in interactive: ", message)
@@ -211,7 +212,20 @@ def interactive():
     )
     
   if message['type'] == 'dialog_submission':
+    
     print(message)
+    
+    file_name = meeting_doc
+    '''
+    headers = {
+      'Content-Type': 'application/json',
+    }
+    data = {
+      "value1": file_name,
+    }
+    ifttt_addnote_url = "https://maker.ifttt.com/trigger/addnote/with/key/coqoCKj-CvTtB6KT-ZQda-"
+    response = requests.post(url=ifttt_addnote_url, json = data)
+    '''
     confirm_res = slack_bot_client.api_call("chat.postMessage",channel=user_id,text="Gotcha, thanks!", as_user=True)
     
   return make_response("", 200)
