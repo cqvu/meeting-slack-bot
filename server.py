@@ -6,6 +6,7 @@ from pprint import pprint
 import requests
 
 global meeting_doc
+meeting_doc = None
 
 app = Flask(__name__)
 slack_api_client = SlackClient(os.environ['SLACK_API_TOKEN'])
@@ -59,6 +60,9 @@ def createnote():
   
   global meeting_doc
   meeting_doc = file_name
+  doc_file = open("doc.txt", "w+")
+  doc_file.write(file_name)
+  doc_file.close()
   
   return jsonify(payload)
   
@@ -106,7 +110,6 @@ def remindnotes():
 
 @app.route('/interactive', methods=['POST'])
 def interactive():
-  global meeting_doc
   message = json.loads(request.form['payload'])
   user_id = message['user']['id']
   print("Message in interactive: ", message)
@@ -212,10 +215,13 @@ def interactive():
     )
     
   if message['type'] == 'dialog_submission':
-    
+    doc_file = open("doc.txt", "r")
     submission = message['submission']
-    
+    global meeting_doc
     file_name = meeting_doc
+    
+    if file_name == None:
+      file_name = doc_file.readline()
     
     content = ""
     
