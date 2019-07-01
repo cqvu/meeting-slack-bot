@@ -3,15 +3,7 @@ from slackclient import SlackClient
 from flask import abort, Flask, jsonify, request, make_response
 import json
 from pprint import pprint
-import googleapiclient
-import google-auth.google.oath2
-import oauth2client
-
-clientID = os.environ['DRIVE_CLIENT_ID']
-clientSecret = os.environ['DRIVE_CLIENT_SECRET']
-callbackURL = 'https://meeting-slackbot.glitch.me/login/google/return';
-scopes = ['https://www.googleapis.com/auth/documents'];
-oauth2Client = google.auth.auth2client(clientID, clientSecret, callbackURL);
+import requests
 
 app = Flask(__name__)
 slack_api_client = SlackClient(os.environ['SLACK_API_TOKEN'])
@@ -45,6 +37,27 @@ def createnote():
   if not is_request_valid(request):
     print("not valid")
     abort(400)
+
+  message = request.form
+  file_name = message['text']
+  
+  headers = {
+    'Content-Type': 'application/json',
+  }
+  
+  data = {
+    "value1": file_name,
+  }
+  
+  ifttt_webhook_url = "https://maker.ifttt.com/trigger/makenote/with/key/coqoCKj-CvTtB6KT-ZQda-"
+  response = requests.post(ifttt_webhook_url, headers=headers, data=data)
+
+  payload = {
+    'response_type':'in_channel',
+    'text':'Created ' + file_name + " in Google Drive!"
+  }
+  
+  return jsonify(payload)
   
 
   
