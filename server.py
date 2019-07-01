@@ -216,6 +216,11 @@ def interactive():
     print(message)
     
     file_name = meeting_doc
+    
+    content = ""
+    
+    content += 
+    
     '''
     headers = {
       'Content-Type': 'application/json',
