@@ -75,6 +75,7 @@ def createnote():
   
   g_login.LoadCredentialsFile("credentials.json")
   if g_login.credentials is None:
+    print("HERE")
     g_login.LocalWebserverAuth()
   elif g_login.access_token_expired:
     g_login.Refresh()
@@ -85,9 +86,11 @@ def createnote():
 
   drive = GoogleDrive(g_login)
   
+  print("HERE2")
   file1 = drive.CreateFile({'title': 'Hello'})  # Create GoogleDriveFile instance with title 'Hello.txt'.
   file1.SetContentString('Hello World!') # Set content of the file from given string.
   file1.Upload()
+  print("FINISH")
   
 @app.route('/remindnotes', methods=['POST'])
 def remindnotes():
