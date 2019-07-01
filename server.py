@@ -73,6 +73,10 @@ def createnote():
   
   g_login = GoogleAuth()
   
+  auth_url = g_login.GetAuthUrl() # Create authentication url user needs to visit
+  code = g_login.CommandLineAuth() # Your customized authentication flow
+  g_login.Auth(code) # Authorize and build service from the code
+  '''
   g_login.LoadCredentialsFile("credentials.json")
   if g_login.credentials is None:
     print("HERE")
@@ -82,8 +86,8 @@ def createnote():
     g_login.Refresh()
   else:
     g_login.Authorize()
-
-  print("saving crediential")
+  '''
+    
   g_login.SaveCredentialsFile("credentials.json")
 
   drive = GoogleDrive(g_login)
