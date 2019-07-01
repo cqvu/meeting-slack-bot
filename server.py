@@ -226,6 +226,8 @@ def interactive():
     content += submission['third'] + ": \n"
     content += submission['topic3'] + "\n"
     
+    print(content)
+    
     '''
     headers = {
       'Content-Type': 'application/json',
