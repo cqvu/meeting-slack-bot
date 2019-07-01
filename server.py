@@ -226,12 +226,16 @@ def interactive():
     
     content = ""
     
-    content += submission['first'] + ": \n"
-    content += submission['topic1'] + "\n"
-    content += submission['second'] + ": \n"
-    content += submission['topic2'] + "\n"
-    content += submission['third'] + ": \n"
-    content += submission['topic3'] + "\n"
+    content += submission['first'] + ":" + "<br>"
+    content += submission['topic1'] + "<br>""
+    
+    if submission['second'] != None:
+      content += submission['second'] + ":" + "<br>"
+      content += submission['topic2'] + "<br>"
+    
+    if submission['third'] != None:
+      content += submission['third'] + ":" + "<br>"
+      content += submission['topic3'] + "
     
     headers = {
       'Content-Type': 'application/json',
