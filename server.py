@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 from slackclient import SlackClient
 from flask import abort, Flask, jsonify, request, make_response
@@ -5,6 +6,11 @@ import json
 from pprint import pprint
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
+import pickle
+import os.path
+from googleapiclient.discovery import build
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
 
 app = Flask(__name__)
 slack_api_client = SlackClient(os.environ['SLACK_API_TOKEN'])
@@ -40,7 +46,7 @@ def createnote():
     print("not valid")
     abort(400)
   
-  '''
+  
   creds = None
     # The file token.pickle stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
@@ -69,8 +75,9 @@ def createnote():
     .create(body=body).execute()
   print('Created document with title: {0}'.format(
     doc.get('title')))
-  '''
   
+  
+  '''
   g_login = GoogleAuth()
   
   auth_url = g_login.GetAuthUrl() # Create authentication url user needs to visit
@@ -92,11 +99,11 @@ def createnote():
 
   drive = GoogleDrive(g_login)
   
-  print("HERE2")
+
   file1 = drive.CreateFile({'title': 'Hello'})  # Create GoogleDriveFile instance with title 'Hello.txt'.
   file1.SetContentString('Hello World!') # Set content of the file from given string.
   file1.Upload()
-  print("FINISH")
+  '''
   
 @app.route('/remindnotes', methods=['POST'])
 def remindnotes():
