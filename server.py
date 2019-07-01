@@ -5,6 +5,8 @@ import json
 from pprint import pprint
 import requests
 
+global meeting_doc
+
 app = Flask(__name__)
 slack_api_client = SlackClient(os.environ['SLACK_API_TOKEN'])
 slack_bot_client = SlackClient(os.environ['SLACK_BOT_TOKEN'])
@@ -54,6 +56,10 @@ def createnote():
     'response_type':'in_channel',
     'text':'Created ' + file_name + " in Google Drive!"
   }
+  
+  global meeting_doc
+  meeting_doc = file_name
+  
   return jsonify(payload)
   
 
@@ -205,6 +211,7 @@ def interactive():
     )
     
   if message['type'] == 'dialog_submission':
+    print(message)
     confirm_res = slack_bot_client.api_call("chat.postMessage",channel=user_id,text="Gotcha, thanks!", as_user=True)
     
   return make_response("", 200)
