@@ -4,6 +4,7 @@ from flask import abort, Flask, jsonify, request, make_response
 import json
 from pprint import pprint
 import requests
+from termcolor import colored
 
 global meeting_doc
 meeting_doc = None
@@ -129,27 +130,27 @@ def interactive():
               "options": [
                 {
                   "label": "Mentorship",
-                  "value": "mentorship"
+                  "value": "Mentorship"
                 },
                 {
                   "label": "Projects Team",
-                  "value": "project"
+                  "value": "Projects"
                 },
                 {
                   "label": "Professional",
-                  "value": "professional"
+                  "value": "Professional"
                 },
                 {
                   "label": "Faculty Mixer",
-                  "value": "facultymixer"
+                  "value": "Faculty Mixer"
                 },
                 {
                   "label": "Town Hall",
-                  "value": "townhall"
+                  "value": "Town Hall"
                 },
                 {
                   "label": "Destressers",
-                  "value": "destress"
+                  "value": "Destresser"
                 }
               ]
             },
@@ -166,27 +167,27 @@ def interactive():
               "options": [
                 {
                   "label": "Mentorship",
-                  "value": "mentorship"
+                  "value": "Mentorship"
                 },
                 {
                   "label": "Projects Team",
-                  "value": "project"
+                  "value": "Projects"
                 },
                 {
                   "label": "Professional",
-                  "value": "professional"
+                  "value": "Professional"
                 },
                 {
                   "label": "Faculty Mixer",
-                  "value": "facultymixer"
+                  "value": "Faculty Mixer"
                 },
                 {
                   "label": "Town Hall",
-                  "value": "townhall"
+                  "value": "Town Hall"
                 },
                 {
                   "label": "Destressers",
-                  "value": "destress"
+                  "value": "Destressers"
                 }
               ],
               "optional": True
@@ -232,18 +233,21 @@ def interactive():
     content += submission['third'] + ": \n"
     content += submission['topic3'] + "\n"
     
-    print(content)
-    
-    '''
     headers = {
       'Content-Type': 'application/json',
     }
     data = {
       "value1": file_name,
+      "value2": content
     }
+    
+    print(content)
+    
     ifttt_addnote_url = "https://maker.ifttt.com/trigger/addnote/with/key/coqoCKj-CvTtB6KT-ZQda-"
     response = requests.post(url=ifttt_addnote_url, json = data)
-    '''
+    
+    print(response.status_code, response.reason)
+    
     confirm_res = slack_bot_client.api_call("chat.postMessage",channel=user_id,text="Gotcha, thanks!", as_user=True)
     
   return make_response("", 200)
