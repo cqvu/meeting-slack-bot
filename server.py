@@ -76,12 +76,14 @@ def createnote():
   g_login.LoadCredentialsFile("credentials.json")
   if g_login.credentials is None:
     print("HERE")
-    g_login.LocalWebserverAuth()
+    g_login.WebserverAuth()
+    print("After")
   elif g_login.access_token_expired:
     g_login.Refresh()
   else:
     g_login.Authorize()
 
+  print("saving crediential")
   g_login.SaveCredentialsFile("credentials.json")
 
   drive = GoogleDrive(g_login)
