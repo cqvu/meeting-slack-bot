@@ -46,12 +46,13 @@ def createnote():
   }
   
   data = {
-    "value1": file_name,
+    "value1": file_name
   }
   
   ifttt_webhook_url = "https://maker.ifttt.com/trigger/makenote/with/key/coqoCKj-CvTtB6KT-ZQda-"
-  response = requests.post(ifttt_webhook_url, headers=headers, data=data)
+  response = requests.post(url=ifttt_webhook_url, json = data)
 
+  print(response.status_code, response.reason)
   payload = {
     'response_type':'in_channel',
     'text':'Created ' + file_name + " in Google Drive!"
