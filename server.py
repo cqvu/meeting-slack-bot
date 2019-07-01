@@ -3,6 +3,14 @@ from slackclient import SlackClient
 from flask import abort, Flask, jsonify, request, make_response
 import json
 from pprint import pprint
+import googleapiclient 
+
+google = googleapiclient
+clientID = os.environ['DRIVE_CLIENT_ID']
+clientSecret = os.environ['DRIVE_CLIENT_SECRET']
+callbackURL = 'https://meeting-slackbot.glitch.me/login/google/return';
+scopes = ['https://www.googleapis.com/auth/documents'];
+var oauth2Client = new google.auth.OAuth2(clientID, clientSecret, callbackURL);
 
 app = Flask(__name__)
 slack_api_client = SlackClient(os.environ['SLACK_API_TOKEN'])
