@@ -213,13 +213,18 @@ def interactive():
     
   if message['type'] == 'dialog_submission':
     
-    print(message)
+    submission = message['submission']
     
     file_name = meeting_doc
     
     content = ""
     
-    content += 
+    content += submission['first'] + ": \n"
+    content += submission['topic1'] + "\n"
+    content += submission['second'] + ": \n"
+    content += submission['topic2'] + "\n"
+    content += submission['third'] + ": \n"
+    content += submission['topic3'] + "\n"
     
     '''
     headers = {
