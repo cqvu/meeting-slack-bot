@@ -11,11 +11,14 @@ slack_api_client.api_call("api.test")
 
 # Firebase configurations
 config = {
-  "apiKey": os.environ['FIREBASE_',
-  "authDomain": "projectId.firebaseapp.com",
-  "databaseURL": "https://databaseName.firebaseio.com",
-  "storageBucket": "projectId.appspot.com"
+  "apiKey": os.environ['FIREBASE_APIKEY'],
+  "authDomain": os.environ['FIREBASE_AUTHDOMAIN'],
+  "databaseURL": os.environ['FIREBASE_DATABASEURL'],
+  "storageBucket": os.environ['FIREBASE_STORAGEBUCKET']
 }
+# Initialize Firebase
+firebase = pyrebase.initialize_app(config)
+db = firebase.database()
 
 def is_request_valid(request):
   is_token_valid = request.form['token'] == os.environ['SLACK_VERIFICATION_TOKEN']
@@ -257,6 +260,4 @@ def interactive():
   return make_response("", 200)
 
 if __name__ == "__main__":
-  // Initialize Firebase
-  firebase = pyrebase.initialize_app(config)
   app.run()
