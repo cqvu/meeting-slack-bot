@@ -38,6 +38,10 @@ def check_bot(user_id):
     return True
   else:
     return False
+  
+def get_member_name(user_id):
+  user_info = slack_bot_client.api_call("users.info", user=user_id)
+  return user_info['user']['real_name']
 
 @app.route('/', methods=['GET'])
 def verify():
@@ -72,8 +76,6 @@ def createnote():
   
   return jsonify(payload)
   
-
-  
 @app.route('/remindnotes', methods=['POST'])
 def remindnotes():
   if not is_request_valid(request):
@@ -83,7 +85,14 @@ def remindnotes():
   message = request.form
   user_id = message['user_id']
   
-  print(db.val())
+  if db.get().val() == None:
+    members = get_members_id("CK5HEF5R7")
+    for member in members:
+      data = { "name": get_member_name(member),
+               "actionitems": None
+             }
+      
+      db.child(member).set(data)
   
   if message['command'] == '/remindnotes':
     members = get_members_id("CK5HEF5R7")
@@ -115,6 +124,8 @@ def remindnotes():
   }
   
   return jsonify(payload)
+
+@app.route('actionitem')
 
 @app.route('/interactive', methods=['POST'])
 def interactive():
