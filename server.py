@@ -9,6 +9,14 @@ slack_api_client = SlackClient(os.environ['SLACK_API_TOKEN'])
 slack_bot_client = SlackClient(os.environ['SLACK_BOT_TOKEN'])
 slack_api_client.api_call("api.test")
 
+# Firebase configurations
+config = {
+  "apiKey": os.environ['FIREBASE_',
+  "authDomain": "projectId.firebaseapp.com",
+  "databaseURL": "https://databaseName.firebaseio.com",
+  "storageBucket": "projectId.appspot.com"
+}
+
 def is_request_valid(request):
   is_token_valid = request.form['token'] == os.environ['SLACK_VERIFICATION_TOKEN']
   is_team_id_valid = request.form['team_id'] == os.environ['SLACK_TEAM_ID']
@@ -212,9 +220,10 @@ def interactive():
     doc_file = open("doc.txt", "r")
     submission = message['submission']
     
-    if file_name == None:
-      file_name = doc_file.readline()
+    # Get the last saved meeting notes doc
+    file_name = doc_file.readline()
     
+    # Format content to be sent to meeting notes doc
     content = ""
     
     content += submission['first'] + ": \n" + "<br>"
@@ -248,4 +257,6 @@ def interactive():
   return make_response("", 200)
 
 if __name__ == "__main__":
+  // Initialize Firebase
+  firebase = pyrebase.initialize_app(config)
   app.run()
