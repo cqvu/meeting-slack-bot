@@ -19,6 +19,7 @@ config = {
 # Initialize Firebase
 firebase = pyrebase.initialize_app(config)
 db = firebase.database()
+db = db.child('slack-bot-245306')
 
 def is_request_valid(request):
   is_token_valid = request.form['token'] == os.environ['SLACK_VERIFICATION_TOKEN']
@@ -81,6 +82,8 @@ def remindnotes():
     
   message = request.form
   user_id = message['user_id']
+  
+  print(db.val())
   
   if message['command'] == '/remindnotes':
     members = get_members_id("CK5HEF5R7")
