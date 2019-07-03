@@ -85,15 +85,6 @@ def remindnotes():
   message = request.form
   user_id = message['user_id']
   
-  if db.get().val() == None:
-    members = get_members_id("CK5HEF5R7")
-    for member in members:
-      data = { "name": get_member_name(member),
-               "actionitems": None
-             }
-      
-      db.child(member).set(data)
-  
   if message['command'] == '/remindnotes':
     members = get_members_id("CK5HEF5R7")
     for member in members:
@@ -125,7 +116,34 @@ def remindnotes():
   
   return jsonify(payload)
 
-@app.route('actionitem')
+@app.route('/actionitem', methods=['POST'])
+def actionitem():
+  if db.get().val() == None:
+    members = get_members_id("CK5HEF5R7")
+    for member in members:
+      data = { "name": get_member_name(member),
+               "actionitems": ['']
+             }
+      
+      db.child(member).set(data)
+    
+  message = request.form['text']
+  print(message)
+  
+  assignee = message[message.find('@')+1: message.find('|')]
+  task = message[message.find('>')+2::]
+  
+  cur_items = db.child(assignee).child('actionitems').get().val()
+  new_items = cur_items.append(task)
+  
+  db.child(assignee).child('actionitems').update(cur_items)
+  
+  payload = {
+    'response_type':'in_channel',
+    'text':'Added'
+  }
+  
+  return jsonify(payload)
 
 @app.route('/interactive', methods=['POST'])
 def interactive():
