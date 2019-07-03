@@ -280,9 +280,7 @@ def interactive():
       "value1": file_name,
       "value2": content
     }
-    
-    print(content)
-    
+       
     ifttt_addnote_url = "https://maker.ifttt.com/trigger/addnote/with/key/coqoCKj-CvTtB6KT-ZQda-"
     response = requests.post(url=ifttt_addnote_url, json = data)
     
