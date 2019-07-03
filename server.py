@@ -122,7 +122,7 @@ def actionitem():
     members = get_members_id("CK5HEF5R7")
     for member in members:
       data = { "name": get_member_name(member),
-               "actionitems": ['']
+               "actionitems": []
              }
       
       db.child(member).set(data)
@@ -133,7 +133,13 @@ def actionitem():
   assignee = message[message.find('@')+1: message.find('|')]
   task = message[message.find('>')+2::]
   
-  cur_items = db.child(assignee).child('actionitems').get().val()
+  cur_items = db.child(assignee).child('actionitems')
+  
+  print('cur_items:', cur_items.get().val())
+  if cur_items.get().val() == None:
+    print("IN HERE")
+    cur_items = []
+    
   new_items = cur_items.append(task)
   
   db.child(assignee).child('actionitems').update(cur_items)
