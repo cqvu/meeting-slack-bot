@@ -128,26 +128,20 @@ def actionitem():
       db.child(member).set(data)
     
   message = request.form['text']
-  print(message)
   
   assignee = message[message.find('@')+1: message.find('|')]
   task = message[message.find('>')+2::]
   cur_items = db.child(assignee).child('actionitems').get().val()
   
-  print('cur_items:', cur_items)
   if cur_items == None:
-    print("IN HERE")
     cur_items = []
     
-  print(cur_items)
   cur_items.append(task)
-  print('after:', cur_items)
-  
   db.child(assignee).child('actionitems').set(cur_items)
   
   payload = {
     'response_type':'in_channel',
-    'text':'Added'
+    'text':'Added \"' + task + '\" to ' + get_member_name(assignee)
   }
   
   return jsonify(payload)
