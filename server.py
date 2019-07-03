@@ -132,17 +132,18 @@ def actionitem():
   
   assignee = message[message.find('@')+1: message.find('|')]
   task = message[message.find('>')+2::]
+  cur_items = db.child(assignee).child('actionitems').get().val()
   
-  cur_items = db.child(assignee).child('actionitems')
-  
-  print('cur_items:', cur_items.get().val())
-  if cur_items.get().val() == None:
+  print('cur_items:', cur_items)
+  if cur_items == None:
     print("IN HERE")
     cur_items = []
     
-  new_items = cur_items.append(task)
+  print(cur_items)
+  cur_items.append(task)
+  print('after:', cur_items)
   
-  db.child(assignee).child('actionitems').update(cur_items)
+  db.child(assignee).child('actionitems').set(cur_items)
   
   payload = {
     'response_type':'in_channel',
