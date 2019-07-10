@@ -153,8 +153,12 @@ def actionitem():
 def getactionitem():
   user = request.form['user_id']
   action_items = db.child(user).child('actionitems').get().val()
+  print(db.child(user).child('actionitems').get().val())
   print(action_items)
-  confirm_res = slack_bot_client.api_call("chat.postMessage",channel=user, text="Gotcha, thanks!", as_user=True)
+  text = 'Your action items:' + '\n'
+  for index, items in enumerate(action_items):
+    text += '[' + str(index+1) + '] ' + items + '\n'
+  confirm_res = slack_bot_client.api_call("chat.postMessage",channel=user, text=text, as_user=True)
 
   return make_response("", 200)
   
