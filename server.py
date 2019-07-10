@@ -26,12 +26,14 @@ def is_request_valid(request):
   is_team_id_valid = request.form['team_id'] == os.environ['SLACK_TEAM_ID']
   return is_token_valid and is_team_id_valid
 
+# Get all the IDs of the members in a channel
 def get_members_id(channel):
   channels_info = slack_bot_client.api_call("channels.info", channel=channel)
   if channels_info.get('ok'):
     return channels_info['channel']['members']
   return None
 
+# Check if the user is a bot
 def check_bot(user_id):
   user_info = slack_bot_client.api_call("users.info", user=user_id)
   if user_info['user']['is_bot']:
@@ -39,6 +41,7 @@ def check_bot(user_id):
   else:
     return False
   
+# Get the name of a member given the user id
 def get_member_name(user_id):
   user_info = slack_bot_client.api_call("users.info", user=user_id)
   return user_info['user']['real_name']
@@ -146,6 +149,15 @@ def actionitem():
   
   return jsonify(payload)
 
+@app.route('/getactionitem', methods=['POST'])
+def getactionitem():
+  user = request.form['user_id']
+  action_items = db.child(user).child('actionitems').get().val()
+  print(action_items)
+  confirm_res = slack_bot_client.api_call("chat.postMessage",channel=user, text="Gotcha, thanks!", as_user=True)
+
+  return make_response("", 200)
+  
 @app.route('/interactive', methods=['POST'])
 def interactive():
   message = json.loads(request.form['payload'])
