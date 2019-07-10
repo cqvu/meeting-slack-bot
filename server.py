@@ -152,8 +152,8 @@ def actionitem():
 @app.route('/getactionitem', methods=['POST'])
 def getactionitem():
   user = request.form['user_id']
+  print(user)
   action_items = db.child(user).child('actionitems').get().val()
-  print(db.child(user).child('actionitems').get().val())
   print(action_items)
   text = 'Your action items:' + '\n'
   for index, items in enumerate(action_items):
