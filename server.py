@@ -121,6 +121,7 @@ def remindnotes():
 
 @app.route('/actionitem', methods=['POST'])
 def actionitem():
+  message = request.form
   if message['command'] == '/actionitem':
     if db.get().val() == None:
       members = get_members_id("CK5HEF5R7")
