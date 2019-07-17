@@ -121,33 +121,46 @@ def remindnotes():
 
 @app.route('/actionitem', methods=['POST'])
 def actionitem():
-  if db.get().val() == None:
-    members = get_members_id("CK5HEF5R7")
-    for member in members:
-      data = { "name": get_member_name(member),
-               "actionitems": []
-             }
-      
-      db.child(member).set(data)
-    
-  message = request.form['text']
-  
-  assignee = message[message.find('@')+1: message.find('|')]
-  task = message[message.find('>')+2::]
-  cur_items = db.child(assignee).child('actionitems').get().val()
-  
-  if cur_items == None:
-    cur_items = []
-    
-  cur_items.append(task)
-  db.child(assignee).child('actionitems').set(cur_items)
-  
-  payload = {
-    'response_type':'in_channel',
-    'text':'Added \"' + task + '\" to ' + get_member_name(assignee)
-  }
-  
-  return jsonify(payload)
+  if message['command'] == '/actionitem':
+    if db.get().val() == None:
+      members = get_members_id("CK5HEF5R7")
+      for member in members:
+        data = { "name": get_member_name(member),
+                 "actionitems": []
+               }
+
+        db.child(member).set(data)
+
+    message = request.form['text']
+
+    assignee = message[message.find('@')+1: message.find('|')]
+    task = message[message.find('>')+2::]
+    cur_items = db.child(assignee).child('actionitems').get().val()
+
+    if cur_items == None:
+      cur_items = []
+
+    cur_items.append(task)
+    db.child(assignee).child('actionitems').set(cur_items)
+
+    payload = {
+      'response_type':'in_channel',
+      'text':'Added \"' + task + '\" to ' + get_member_name(assignee)
+    }
+
+    return jsonify(payload)
+
+  if message['command'] == '/getactionitem':
+    user = request.form['user_id']
+    print(user)
+    action_items = db.child(user).child('actionitems').get().val()
+    print(action_items)
+    text = 'Your action items:' + '\n'
+    for index, items in enumerate(action_items):
+      text += '[' + str(index+1) + '] ' + items + '\n'
+    confirm_res = slack_bot_client.api_call("chat.postMessage",channel=user, text=text, as_user=True)
+
+    return make_response("", 200)
 
 @app.route('/getactionitem', methods=['POST'])
 def getactionitem():
