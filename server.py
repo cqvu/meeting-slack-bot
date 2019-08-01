@@ -69,7 +69,7 @@ def createnote():
   response = requests.post(url=ifttt_makenote_url, json = data)
 
   payload = {
-
+    'response_type':'ephemeral',
     'text':'Created ' + file_name + " in Google Drive!"
   }
   
@@ -113,7 +113,7 @@ def remindnotes():
         button_res = slack_bot_client.api_call("chat.postMessage",channel=member,text="Add Your Meeting Notes", attachments = attach_json, as_user=True)
   
   payload = {
-    'response_type':'in_channel',
+    'response_type':'ephemeral',
     'text':'Sent Add Notes Reminder!'
   }
   
@@ -143,6 +143,7 @@ def actionitem():
     db.child(assignee).child('actionitems').set(cur_items)
 
     payload = {
+      'response_type':'ephemeral',
       'text':'Added \"' + task + '\" to ' + get_member_name(assignee)
     }
 
@@ -197,6 +198,8 @@ def followup():
             "style": "danger",
             "value": str(item),
             "action_id": "button",
+            "replace_original": True,
+            "text": "You've completed " + item + "!"
           }
         }
         blocks.append(block_json)
@@ -206,6 +209,7 @@ def followup():
     print(button_res)
 
   payload = {
+    'response_type':'ephemeral',
     'text':'Sent Follow-ups!'
   }
 
