@@ -135,11 +135,12 @@ def actionitem():
     assignee = message[message.find('@')+1: message.find('|')]
     task = message[message.find('>')+2::]
     cur_items = db.child(assignee).child('actionitems').get().val()
+    
+    print(cur_items)
 
     if cur_items == None:
       cur_items = []
-
-    print(cur_items)
+      
     cur_items.append(task)
     db.child(assignee).child('actionitems').set(cur_items)
 
@@ -156,7 +157,7 @@ def actionitem():
     action_items = db.child(user).child('actionitems').get().val()
     print(action_items)
     text = 'Your action items:' + '\n'
-    for index, items in enumerate(action_items.values()):
+    for index, items in enumerate(action_items):
       text += '[' + str(index+1) + '] ' + items + '\n'
     confirm_res = slack_bot_client.api_call("chat.postMessage",channel=user, text=text, as_user=True)
 
@@ -181,7 +182,7 @@ def followup():
         }
 	    }
     ]
-    for index, item in enumerate(action_items.values()):
+    for index, item in enumerate(action_items):
       if item is not None:
         print("Item: ", item)
         block_json = {
@@ -324,10 +325,10 @@ def interactive():
     print(message)
     value = message['actions'][0]['value']
     print("value: ", value)
-    actionitems = db.child(user_id).child('actionitems').get().val()
-    for index, item in actionitems.items():
-      if item == value:
-        db.child(user_id).child('actionitems').child(index).remove()
+    actionitems = db.child(user_id).child('actionitems').get()
+    for item in actionitems.each():
+      if item.val() == value:
+        db.child(user_id).child('actionitems').child(item.key()).remove()
   
   if message['type'] == 'dialog_submission':
     doc_file = open("doc.txt", "r")
