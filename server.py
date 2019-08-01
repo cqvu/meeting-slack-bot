@@ -69,7 +69,7 @@ def createnote():
   response = requests.post(url=ifttt_makenote_url, json = data)
 
   payload = {
-    'response_type':'in_channel',
+
     'text':'Created ' + file_name + " in Google Drive!"
   }
   
@@ -143,7 +143,6 @@ def actionitem():
     db.child(assignee).child('actionitems').set(cur_items)
 
     payload = {
-      'response_type':'in_channel',
       'text':'Added \"' + task + '\" to ' + get_member_name(assignee)
     }
 
@@ -155,7 +154,7 @@ def actionitem():
     action_items = db.child(user).child('actionitems').get().val()
     print(action_items)
     text = 'Your action items:' + '\n'
-    for index, items in enumerate(action_items):
+    for index, items in enumerate(action_items.values()):
       text += '[' + str(index+1) + '] ' + items + '\n'
     confirm_res = slack_bot_client.api_call("chat.postMessage",channel=user, text=text, as_user=True)
 
@@ -181,31 +180,32 @@ def followup():
 	    }
     ]
     for index, item in enumerate(action_items):
-      block_json = {
-        "type": "section",
-        "text": {
-          "type": "mrkdwn",
-          "text": item
-        },
-        "accessory": {
-          "type": "button",
+      if item is not None:
+        print("Item: ", item)
+        block_json = {
+          "type": "section",
           "text": {
-            "type": "plain_text",
-            "text": "Done"
+            "type": "mrkdwn",
+            "text": item
           },
-          "style": "danger",
-          "value": str(item),
-          "action_id": "button",
+          "accessory": {
+            "type": "button",
+            "text": {
+              "type": "plain_text",
+              "text": "Done"
+            },
+            "style": "danger",
+            "value": str(item),
+            "action_id": "button",
+          }
         }
-      }
-      blocks.append(block_json)
+        blocks.append(block_json)
 
     print(blocks)
     button_res = slack_bot_client.api_call("chat.postMessage",channel=member, blocks= blocks, as_user=True)
     print(button_res)
 
   payload = {
-    'response_type':'in_channel',
     'text':'Sent Follow-ups!'
   }
 
