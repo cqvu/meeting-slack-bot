@@ -195,7 +195,8 @@ def followup():
           },
           "style": "danger",
           "value": str(index),
-          "action_id": "button"
+          "action_id": "button",
+          "confirm": "You've completed " + item + unicode("\U0001F44D", 'unicode-escape')
         }
       }
       blocks.append(block_json)
