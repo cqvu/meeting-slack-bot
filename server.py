@@ -161,6 +161,48 @@ def actionitem():
 
     return make_response("", 200)
   
+# Send all members a follow up for action items
+@app.route('/followup', methods=['POST'])
+def followup():
+  message = request.form
+  members = get_members_id("CK5HEF5R7") # change to correct channel id
+    for member in members:
+      if not check_bot(member):
+        print("Sending to", member)
+        attach_json = [
+        {
+            "fallback": "You are unable use message buttons",
+            "callback_id": "followup",
+            "color": "#3AA3E3",
+            "attachment_type": "default",
+            "actions": [
+                {
+                    "name": "addnotes",
+                    "text": "Add Notes",
+                    "type": "button",
+                    "value": "addnotes"
+                }
+            ]
+        }
+        ]
+        
+        button_res = slack_bot_client.api_call("chat.postMessage",channel=member,text="Reminder: Here are your action items this week!", attachments = attach_json, as_user=True)
+  
+  payload = {
+    'response_type':'in_channel',
+    'text':'Sent Add Notes Reminder!'
+  }
+  
+  return jsonify(payload)
+  action_items = db.child(user).child('actionitems').get().val()
+  print(action_items)
+  text = 'Your action items:' + '\n'
+  for index, items in enumerate(action_items):
+    text += '[' + str(index+1) + '] ' + items + '\n'
+  confirm_res = slack_bot_client.api_call("chat.postMessage",channel=user, text=text, as_user=True)
+
+  return make_response("", 200)
+  
 @app.route('/interactive', methods=['POST'])
 def interactive():
   message = json.loads(request.form['payload'])
