@@ -169,7 +169,7 @@ def followup():
     for member in members:
       if not check_bot(member):
         print("Sending to", member)
-        attach_json = [
+        block_json = [
         {
             "fallback": "You are unable use message buttons",
             "callback_id": "followup",
@@ -186,7 +186,7 @@ def followup():
         }
         ]
         
-        button_res = slack_bot_client.api_call("chat.postMessage",channel=member,text="Reminder: Here are your action items this week!", attachments = attach_json, as_user=True)
+        button_res = slack_bot_client.api_call("chat.postMessage",channel=member,text="Reminder: Here are your action items this week!", blocks = block_json, as_user=True)
   
   payload = {
     'response_type':'in_channel',
