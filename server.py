@@ -166,42 +166,39 @@ def actionitem():
 def followup():
   message = request.form
   members = get_members_id("CK5HEF5R7") # change to correct channel id
-    for member in members:
-      if not check_bot(member):
-        print("Sending to", member)
-        block_json = [
-        {
-            "fallback": "You are unable use message buttons",
-            "callback_id": "followup",
-            "color": "#3AA3E3",
-            "attachment_type": "default",
-            "actions": [
-                {
-                    "name": "addnotes",
-                    "text": "Add Notes",
-                    "type": "button",
-                    "value": "addnotes"
-                }
-            ]
+  for member in members:
+    if not check_bot(member):
+      print("Sending to", member)
+      action_items = db.child(member).child('actionitems').get().val()
+    print(action_items)
+    blocks = []
+    for index, item in enumerate(action_items):
+      block_json = {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": item
+        },
+        "accessory": {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "Done"
+          },
+          "value": index,
+          "action_id": "button"
         }
-        ]
-        
-        button_res = slack_bot_client.api_call("chat.postMessage",channel=member,text="Reminder: Here are your action items this week!", blocks = block_json, as_user=True)
-  
+      }
+      blocks.append(block_json)
+
+    button_res = slack_bot_client.api_call("chat.postMessage",channel=member, blocks= blocks, as_user=True)
+
   payload = {
     'response_type':'in_channel',
-    'text':'Sent Add Notes Reminder!'
+    'text':'Sent Follow-ups!'
   }
-  
-  return jsonify(payload)
-  action_items = db.child(user).child('actionitems').get().val()
-  print(action_items)
-  text = 'Your action items:' + '\n'
-  for index, items in enumerate(action_items):
-    text += '[' + str(index+1) + '] ' + items + '\n'
-  confirm_res = slack_bot_client.api_call("chat.postMessage",channel=user, text=text, as_user=True)
 
-  return make_response("", 200)
+  return jsonify(payload)
   
 @app.route('/interactive', methods=['POST'])
 def interactive():
