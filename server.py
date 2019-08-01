@@ -180,7 +180,7 @@ def followup():
         }
 	    }
     ]
-    for index, item in enumerate(action_items):
+    for index, item in enumerate(action_items.values()):
       if item is not None:
         print("Item: ", item)
         block_json = {
@@ -198,8 +198,6 @@ def followup():
             "style": "danger",
             "value": str(item),
             "action_id": "button",
-            "replace_original": True,
-            "text": "You've completed " + item + "!"
           }
         }
         blocks.append(block_json)
@@ -324,9 +322,12 @@ def interactive():
   if message['type'] == 'block_actions':
     print(message)
     value = message['actions'][0]['value']
+    print("value: ", value)
     actionitems = db.child(user_id).child('actionitems').get().val()
-    for index, item in enumerate(actionitems):
-      if item == value:
+    for item in enumerate(actionitems):
+      print("item: ", item)
+      if actionitems[item] == value:
+        print(actionitems[item])
         db.child(user_id).child('actionitems').child(index).remove()
   
   if message['type'] == 'dialog_submission':
