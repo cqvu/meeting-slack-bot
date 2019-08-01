@@ -151,8 +151,8 @@ def actionitem():
     return jsonify(payload)
 
   if message['command'] == '/getactionitem':
-    user = request.form['user_id']
-    action_items = db.child(user).child('actionitems').get().val()
+    member = request.form['user_id']
+    action_items = db.child(member).child('actionitems').get().val()
     blocks = [
       {
         "type": "section",
@@ -162,6 +162,7 @@ def actionitem():
         }
 	    }
     ]
+    print(action_items)
     for item in action_items[:]:
        if item is None:
         action_items.remove(item)
@@ -207,6 +208,8 @@ def followup():
           action_items.remove(item)
       for index, item in enumerate(action_items):
         text += '[' + str(index+1) + '] ' + item + '\n'
+      
+      text += "Use /getactionitem to check off completed action items"
       confirm_res = slack_bot_client.api_call("chat.postMessage",channel=member, text=text, as_user=True)
 
   payload = {
