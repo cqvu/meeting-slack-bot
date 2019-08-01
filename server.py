@@ -155,10 +155,12 @@ def actionitem():
     user = request.form['user_id']
     print(user)
     action_items = db.child(user).child('actionitems').get().val()
-    print(action_items)
     text = 'Your action items:' + '\n'
-    for index, items in enumerate(action_items):
-      text += '[' + str(index+1) + '] ' + items + '\n'
+    for item in action_items[:]:
+       if item is None:
+        action_items.remove(item)
+    for index, item in enumerate(action_items):
+      text += '[' + str(index+1) + '] ' + item + '\n'
     confirm_res = slack_bot_client.api_call("chat.postMessage",channel=user, text=text, as_user=True)
 
     return make_response("", 200)
@@ -182,27 +184,29 @@ def followup():
         }
 	    }
     ]
+    for item in action_items[:]:
+       if item is None:
+        action_items.remove(item)
     for index, item in enumerate(action_items):
-      if item is not None:
-        print("Item: ", item)
-        block_json = {
-          "type": "section",
+      print("Item: ", item)
+      block_json = {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": item
+        },
+        "accessory": {
+          "type": "button",
           "text": {
-            "type": "mrkdwn",
-            "text": item
+            "type": "plain_text",
+            "text": "Done"
           },
-          "accessory": {
-            "type": "button",
-            "text": {
-              "type": "plain_text",
-              "text": "Done"
-            },
-            "style": "danger",
-            "value": str(item),
-            "action_id": "button",
-          }
+          "style": "danger",
+          "value": index,
+          "action_id": "button",
         }
-        blocks.append(block_json)
+      }
+      blocks.append(block_json)
 
     print(blocks)
     button_res = slack_bot_client.api_call("chat.postMessage",channel=member, blocks= blocks, as_user=True)
@@ -322,13 +326,11 @@ def interactive():
         }
       )
   if message['type'] == 'block_actions':
-    print(message)
     value = message['actions'][0]['value']
-    print("value: ", value)
-    actionitems = db.child(user_id).child('actionitems').get()
-    for item in actionitems.each():
-      if item.val() == value:
-        db.child(user_id).child('actionitems').child(item.key()).remove()
+    #actionitems = db.child(user_id).child('actionitems').get()
+    #for item in actionitems.each():
+      #if item.val() == value:
+    db.child(user_id).child('actionitems').child(value).remove()
   
   if message['type'] == 'dialog_submission':
     doc_file = open("doc.txt", "r")
