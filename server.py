@@ -317,7 +317,11 @@ def interactive():
           ]
         }
       )
-    
+  if message['type'] == 'block_actions':
+    print(message)
+    index = int(message['actions'][0]['value'])
+    print(index)
+    db.child(user_id).child('actionitems').child(index).remove()
   if message['type'] == 'dialog_submission':
     doc_file = open("doc.txt", "r")
     submission = message['submission']
