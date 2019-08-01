@@ -139,6 +139,7 @@ def actionitem():
     if cur_items == None:
       cur_items = []
 
+    print(cur_items)
     cur_items.append(task)
     db.child(assignee).child('actionitems').set(cur_items)
 
@@ -324,10 +325,8 @@ def interactive():
     value = message['actions'][0]['value']
     print("value: ", value)
     actionitems = db.child(user_id).child('actionitems').get().val()
-    for item in enumerate(actionitems):
-      print("item: ", item)
-      if actionitems[item] == value:
-        print(actionitems[item])
+    for index, item in actionitems.items():
+      if item == value:
         db.child(user_id).child('actionitems').child(index).remove()
   
   if message['type'] == 'dialog_submission':
