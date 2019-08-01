@@ -171,7 +171,15 @@ def followup():
       print("Sending to", member)
       action_items = db.child(member).child('actionitems').get().val()
     print(action_items)
-    blocks = []
+    blocks = [
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": "*Reminder*: Here are you action items! :rocket: "
+        }
+	    }
+    ]
     for index, item in enumerate(action_items):
       block_json = {
         "type": "section",
@@ -185,13 +193,16 @@ def followup():
             "type": "plain_text",
             "text": "Done"
           },
-          "value": index,
+          "style": "danger",
+          "value": str(index),
           "action_id": "button"
         }
       }
       blocks.append(block_json)
 
+    print(blocks)
     button_res = slack_bot_client.api_call("chat.postMessage",channel=member, blocks= blocks, as_user=True)
+    print(button_res)
 
   payload = {
     'response_type':'in_channel',
@@ -205,106 +216,107 @@ def interactive():
   message = json.loads(request.form['payload'])
   user_id = message['user']['id']
   print("Message in interactive: ", message)
-  if message['callback_id'] == 'addnotes':
-    open_dialog = slack_api_client.api_call(
-      "dialog.open",
-      trigger_id = message['trigger_id'],
-      dialog = {
-        "title": "Add Your Meeting Notes",
-        "submit_label": "Submit",
-        "callback_id": "meetingnotes " + user_id,
-        "elements": [
-            {
-              "label": "Topic",
-              "type": "select",
-              "name": "first",
-              "options": [
-                {
-                  "label": "Mentorship",
-                  "value": "Mentorship"
-                },
-                {
-                  "label": "Projects Team",
-                  "value": "Projects"
-                },
-                {
-                  "label": "Professional",
-                  "value": "Professional"
-                },
-                {
-                  "label": "Faculty Mixer",
-                  "value": "Faculty Mixer"
-                },
-                {
-                  "label": "Town Hall",
-                  "value": "Town Hall"
-                },
-                {
-                  "label": "Destressers",
-                  "value": "Destresser"
-                }
-              ]
-            },
-            
-            {
-              "label": "Notes/Updates",
-              "name": "topic1",
-              "type": "textarea",
-            },
-            {
-              "label": "Topic",
-              "type": "select",
-              "name": "second",
-              "options": [
-                {
-                  "label": "Mentorship",
-                  "value": "Mentorship"
-                },
-                {
-                  "label": "Projects Team",
-                  "value": "Projects"
-                },
-                {
-                  "label": "Professional",
-                  "value": "Professional"
-                },
-                {
-                  "label": "Faculty Mixer",
-                  "value": "Faculty Mixer"
-                },
-                {
-                  "label": "Town Hall",
-                  "value": "Town Hall"
-                },
-                {
-                  "label": "Destressers",
-                  "value": "Destressers"
-                }
-              ],
-              "optional": True
-            },
-            {
-              "label": "Notes/Updates",
-              "name": "topic2",
-              "type": "textarea",
-              "optional": True
-            },
-            {
-              "label": "Others",
-              "name": "third",
-              "type": "text",
-              "placeholder": "Other topic",
-              "optional": True
-            },
-            {
-              "label": "Notes/Updates",
-              "name": "topic3",
-              "type": "textarea",
-              "optional": True
-            }
-        ]
-      }
-    )
+  if message.get('callback_id'):
+    if message['callback_id'] == 'addnotes':
+      open_dialog = slack_api_client.api_call(
+        "dialog.open",
+        trigger_id = message['trigger_id'],
+        dialog = {
+          "title": "Add Your Meeting Notes",
+          "submit_label": "Submit",
+          "callback_id": "meetingnotes " + user_id,
+          "elements": [
+              {
+                "label": "Topic",
+                "type": "select",
+                "name": "first",
+                "options": [
+                  {
+                    "label": "Mentorship",
+                    "value": "Mentorship"
+                  },
+                  {
+                    "label": "Projects Team",
+                    "value": "Projects"
+                  },
+                  {
+                    "label": "Professional",
+                    "value": "Professional"
+                  },
+                  {
+                    "label": "Faculty Mixer",
+                    "value": "Faculty Mixer"
+                  },
+                  {
+                    "label": "Town Hall",
+                    "value": "Town Hall"
+                  },
+                  {
+                    "label": "Destressers",
+                    "value": "Destresser"
+                  }
+                ]
+              },
+
+              {
+                "label": "Notes/Updates",
+                "name": "topic1",
+                "type": "textarea",
+              },
+              {
+                "label": "Topic",
+                "type": "select",
+                "name": "second",
+                "options": [
+                  {
+                    "label": "Mentorship",
+                    "value": "Mentorship"
+                  },
+                  {
+                    "label": "Projects Team",
+                    "value": "Projects"
+                  },
+                  {
+                    "label": "Professional",
+                    "value": "Professional"
+                  },
+                  {
+                    "label": "Faculty Mixer",
+                    "value": "Faculty Mixer"
+                  },
+                  {
+                    "label": "Town Hall",
+                    "value": "Town Hall"
+                  },
+                  {
+                    "label": "Destressers",
+                    "value": "Destressers"
+                  }
+                ],
+                "optional": True
+              },
+              {
+                "label": "Notes/Updates",
+                "name": "topic2",
+                "type": "textarea",
+                "optional": True
+              },
+              {
+                "label": "Others",
+                "name": "third",
+                "type": "text",
+                "placeholder": "Other topic",
+                "optional": True
+              },
+              {
+                "label": "Notes/Updates",
+                "name": "topic3",
+                "type": "textarea",
+                "optional": True
+              }
+          ]
+        }
+      )
     
   if message['type'] == 'dialog_submission':
     doc_file = open("doc.txt", "r")
