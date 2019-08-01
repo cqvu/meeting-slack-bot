@@ -136,7 +136,6 @@ def actionitem():
     task = message[message.find('>')+2::]
     cur_items = db.child(assignee).child('actionitems').get().val()
     
-    print(cur_items)
 
     if cur_items == None:
       cur_items = []
@@ -153,34 +152,13 @@ def actionitem():
 
   if message['command'] == '/getactionitem':
     user = request.form['user_id']
-    print(user)
     action_items = db.child(user).child('actionitems').get().val()
-    text = 'Your action items:' + '\n'
-    for item in action_items[:]:
-       if item is None:
-        action_items.remove(item)
-    for index, item in enumerate(action_items):
-      text += '[' + str(index+1) + '] ' + item + '\n'
-    confirm_res = slack_bot_client.api_call("chat.postMessage",channel=user, text=text, as_user=True)
-
-    return make_response("", 200)
-  
-# Send all members a follow up for action items
-@app.route('/followup', methods=['POST'])
-def followup():
-  message = request.form
-  members = get_members_id("CK5HEF5R7") # change to correct channel id
-  for member in members:
-    if not check_bot(member):
-      print("Sending to", member)
-      action_items = db.child(member).child('actionitems').get().val()
-    print(action_items)
     blocks = [
       {
         "type": "section",
         "text": {
           "type": "mrkdwn",
-          "text": "*Reminder*: Here are you action items! :rocket: "
+          "text": "Here are you action items! :rocket: "
         }
 	    }
     ]
@@ -202,7 +180,7 @@ def followup():
             "text": "Done"
           },
           "style": "danger",
-          "value": index,
+          "value": item,
           "action_id": "button",
         }
       }
@@ -211,6 +189,25 @@ def followup():
     print(blocks)
     button_res = slack_bot_client.api_call("chat.postMessage",channel=member, blocks= blocks, as_user=True)
     print(button_res)
+
+    return make_response("", 200)
+  
+# Send all members a follow up for action items
+@app.route('/followup', methods=['POST'])
+def followup():
+  message = request.form
+  members = get_members_id("CK5HEF5R7") # change to correct channel id
+  for member in members:
+    if not check_bot(member):
+      print("Sending to", member)
+      action_items = db.child(member).child('actionitems').get().val()
+      text = 'Reminder: Here are your action items!' + '\n'
+      for item in action_items[:]:
+         if item is None:
+          action_items.remove(item)
+      for index, item in enumerate(action_items):
+        text += '[' + str(index+1) + '] ' + item + '\n'
+      confirm_res = slack_bot_client.api_call("chat.postMessage",channel=member, text=text, as_user=True)
 
   payload = {
     'response_type':'ephemeral',
@@ -327,10 +324,10 @@ def interactive():
       )
   if message['type'] == 'block_actions':
     value = message['actions'][0]['value']
-    #actionitems = db.child(user_id).child('actionitems').get()
-    #for item in actionitems.each():
-      #if item.val() == value:
-    db.child(user_id).child('actionitems').child(value).remove()
+    actionitems = db.child(user_id).child('actionitems').get()
+    for item in actionitems.each():
+      if item.val() == value:
+        db.child(user_id).child('actionitems').child(item.key()).remove()
   
   if message['type'] == 'dialog_submission':
     doc_file = open("doc.txt", "r")
