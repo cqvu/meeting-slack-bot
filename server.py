@@ -194,9 +194,8 @@ def followup():
             "text": "Done"
           },
           "style": "danger",
-          "value": str(index),
+          "value": str(item),
           "action_id": "button",
-          "confirm": "You've completed " + item + unicode("\U0001F44D", 'unicode-escape')
         }
       }
       blocks.append(block_json)
@@ -320,9 +319,12 @@ def interactive():
       )
   if message['type'] == 'block_actions':
     print(message)
-    index = int(message['actions'][0]['value'])
-    print(index)
-    db.child(user_id).child('actionitems').child(index).remove()
+    value = message['actions'][0]['value']
+    actionitems = db.child(user_id).child('actionitems').get().val()
+    for index, item in enumerate(actionitems):
+      if item == value:
+        db.child(user_id).child('actionitems').child(index).remove()
+  
   if message['type'] == 'dialog_submission':
     doc_file = open("doc.txt", "r")
     submission = message['submission']
