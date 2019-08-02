@@ -136,12 +136,13 @@ def actionitem():
     task = message[message.find('>')+2::]
     cur_items = db.child(assignee).child('actionitems').get().val()
     
+    print("Current items:", cur_items)
     if cur_items == None:
       cur_items = []
       
-    print("Current items:", cur_items)
+
     cur_items.append(task)
-    db.child(assignee).child('actionitems').set(cur_items)
+    #db.child(assignee).child('actionitems').set(cur_items)
 
     payload = {
       'response_type':'ephemeral',
