@@ -335,7 +335,7 @@ def interactive():
       channel=message['container']["channel_id"],
       ts=message['container']["message_ts"],
       text="Marked " + value +" as completed!",
-      blocks= message['blocks'] # empty `attachments` to clear the existing message attachments
+      blocks=[]
     )
     
     return make_response("", 200)
