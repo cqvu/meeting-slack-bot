@@ -139,6 +139,7 @@ def actionitem():
     if cur_items == None:
       cur_items = []
       
+    print("Current items:", cur_items)
     cur_items.append(task)
     db.child(assignee).child('actionitems').set(cur_items)
 
@@ -161,12 +162,11 @@ def actionitem():
         }
 	    }
     ]
-    print(action_items)
+
     for item in action_items[:]:
        if item is None:
         action_items.remove(item)
     for index, item in enumerate(action_items):
-      print("Item: ", item)
       block_json = {
         "type": "section",
         "text": {
@@ -186,9 +186,7 @@ def actionitem():
       }
       blocks.append(block_json)
 
-    print(blocks)
     button_res = slack_bot_client.api_call("chat.postMessage",channel=member, blocks= blocks, as_user=True)
-    print(button_res)
 
     return make_response("", 200)
   
