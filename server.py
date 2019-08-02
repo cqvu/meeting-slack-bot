@@ -330,12 +330,13 @@ def interactive():
       if item.val() == value:
         db.child(user_id).child('actionitems').child(item.key()).remove()
     
-    payload = {
-      'response_type':'ephemeral',
-      'text':'Sent Follow-ups!'
-    }
-
-    return jsonify(payload)
+    response = slack_bot_client.api_call(
+      "chat.update",
+      channel=message["channel"]["id"],
+      ts=message['container']["message_ts"],
+      text="Marked as completed!",
+      attachments=[] # empty `attachments` to clear the existing massage attachments
+    )
   
   if message['type'] == 'dialog_submission':
     doc_file = open("doc.txt", "r")
