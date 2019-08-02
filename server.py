@@ -123,7 +123,7 @@ def remindnotes():
 def actionitem():
   message = request.form
   if message['command'] == '/actionitem':
-    if db.get().val() == None:
+    if db.get() == None:
       members = get_members_id("CK5HEF5R7")
       for member in members:
         data = { "name": get_member_name(member),
@@ -142,7 +142,7 @@ def actionitem():
       
 
     cur_items.append(task)
-    #db.child(assignee).child('actionitems').set(cur_items)
+    db.child(assignee).child('actionitems').set(cur_items)
 
     payload = {
       'response_type':'ephemeral',
