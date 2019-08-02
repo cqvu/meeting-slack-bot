@@ -332,11 +332,13 @@ def interactive():
     
     response = slack_bot_client.api_call(
       "chat.update",
-      channel=message["channel"]["id"],
+      channel=message['container']["channel_id"],
       ts=message['container']["message_ts"],
-      text="Marked as completed!",
-      attachments=[] # empty `attachments` to clear the existing massage attachments
+      text="Marked " + value +" as completed!",
+      blocks= message['blocks'] # empty `attachments` to clear the existing message attachments
     )
+    
+    return make_response("", 200)
   
   if message['type'] == 'dialog_submission':
     doc_file = open("doc.txt", "r")
