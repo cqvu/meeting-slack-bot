@@ -136,7 +136,6 @@ def actionitem():
     task = message[message.find('>')+2::]
     cur_items = db.child(assignee).child('actionitems').get().val()
     
-
     if cur_items == None:
       cur_items = []
       
