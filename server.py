@@ -329,6 +329,13 @@ def interactive():
     for item in actionitems.each():
       if item.val() == value:
         db.child(user_id).child('actionitems').child(item.key()).remove()
+    
+    payload = {
+      'response_type':'ephemeral',
+      'text':'Sent Follow-ups!'
+    }
+
+    return jsonify(payload)
   
   if message['type'] == 'dialog_submission':
     doc_file = open("doc.txt", "r")
