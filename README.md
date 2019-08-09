@@ -36,4 +36,6 @@ To be used by the secretary.
 Made by [Glitch](https://glitch.com/)
 -------------------
 
+The Glitch project can be found [here](https://glitch.com/edit/#!/meeting-slackbot)
+
 \ ゜o゜)ノ
