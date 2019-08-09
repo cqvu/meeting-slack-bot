@@ -1,24 +1,22 @@
-Welcome to Glitch
+Meeting Slack Bot
 =================
 
-Click `Show` in the header to see your app live. Updates to your code will instantly deploy and update live.
-
-**Glitch** is the friendly community where you'll build the app of your dreams. Glitch lets you instantly create, remix, edit, and host an app, bot or site, and you can invite collaborators or helpers to simultaneously edit code with you.
-
-Find out more [about Glitch](https://glitch.com/about).
+A Slack Bot created to facilitate ECE Undergraduate Student Council's meetings for 2019-2020 and onwards. 🚀
 
 
-Your Project
+Functionalities (Slash Commands)
 ------------
 
-On the front-end,
-- edit `public/client.js`, `public/style.css` and `views/index.html`
-- drag in `assets`, like images or music, to add them to your project
+/createnote [meeting title]
 
-On the back-end,
-- your app starts at `server.js`
-- add frameworks and packages in `package.json`
-- safely store app secrets in `.env` (nobody can see this but you and people you invite)
+Create a meeting note document in ECE USC's Google Drive with the given title
+
+/remindnotes
+
+Send reminders to all council members to add their agenda items. Note submission will automatically be appended
+to the 
+
+/
 
 
 Made by [Glitch](https://glitch.com/)

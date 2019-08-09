@@ -164,6 +164,9 @@ def actionitem():
 	    }
     ]
 
+    if action_items is None:
+      slack_bot_client.api_call("chat.postMessage",channel=member, text="You've completed all action items :)", as_user=True)
+      return make_response("", 200)
     for item in action_items[:]:
        if item is None:
         action_items.remove(item)
